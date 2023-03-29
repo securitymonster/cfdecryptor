@@ -16,8 +16,11 @@ import base64
 import azure.functions as func
 from azure.eventhub import EventHubProducerClient, EventData
 from azure.storage.blob import BlobServiceClient
-
 from pyhpke import AEADId, CipherSuite, KDFId, KEMId, KEMKey
+
+import random
+import datetime
+import time
 
 suite_r = CipherSuite.new(KEMId.DHKEM_X25519_HKDF_SHA256,
                           KDFId.HKDF_SHA256, AEADId.CHACHA20_POLY1305)
@@ -61,19 +64,29 @@ def process_logfile_line(line):
     return json.dumps(logline_dict)
 
 
-def main(event: func.EventGridEvent, blob: func.InputStream):
-    logging.info(f"Found new file, processing... \n"
-    blob_data=blob.read().decode('utf-8')
-    payload_list=list(map(process_logfile_line, blob_data.split('\n')))
+def main(mytimer: func.TimerRequest) -> None:
+    # Generate random data for the JSON object
+    date = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    colors = ["red", "green", "blue", "yellow", "orange"]
+    fruits = ["apple", "banana", "orange", "kiwi", "strawberry"]
+    fruit_color = random.choice(colors)
+    fruit_name = random.choice(fruits)
 
-    connection_str=os.environ["EVENT_HUB_CONN_STR"]
-    eventhub_name=os.environ["EVENT_HUB_NAME"]
+    # Create the JSON object
+    data = {
+        "date": date,
+        "fruit-color": fruit_color,
+        "fruit-name": fruit_name
+    }
+    payload_str = json.dumps(data)
 
-    producer=EventHubProducerClient.from_connection_string(
+    # Send the JSON object to the Event Hub
+    connection_str = os.environ["EVENT_HUB_CONN_STR"]
+    eventhub_name = os.environ["EVENT_HUB_NAME"]
+    producer = EventHubProducerClient.from_connection_string(
         connection_str, eventhub_name=eventhub_name)
     with producer:
-        for payload_str in payload_list:
-            event_data=EventData(payload_str)
-            producer.send(event_data)
+        event_data = EventData(payload_str)
+        producer.send(event_data)
 
-    return func.HttpResponse(f"Processed blob: {blob.name}.", status_code=200)
+    return
