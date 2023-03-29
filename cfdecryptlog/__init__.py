@@ -85,8 +85,12 @@ def main(mytimer: func.TimerRequest) -> None:
     eventhub_name = os.environ["EVENT_HUB_NAME"]
     producer = EventHubProducerClient.from_connection_string(
         connection_str, eventhub_name=eventhub_name)
-    with producer:
-        event_data = EventData(payload_str)
-        producer.send(event_data)
+    try:
+        with producer:
+            event_data = EventData(payload_str)
+            producer.send(event_data)
+        logging.info('Message sent to Event Hub: %s', payload_str)
+    except Exception as e:
+        logging.error('Error sending message to Event Hub: %s', str(e))
 
     return
