@@ -25,12 +25,16 @@ suite_r = CipherSuite.new(KEMId.DHKEM_X25519_HKDF_SHA256,
 private_key = base64.b64decode(os.environ["PRIVATE_KEY"])
 
 def process_logfile_line(line):
+    # Read the log line, which is a JSON string, into a dict
     logline_dict = json.loads(line)
 
+    # Only do this if there is any metadata
     if "Metadata" in logline_dict:
         if "encrypted_matched_data" in logline_dict["Metadata"]:
+            # The encrypted_matched_data is a base64 encoded JSON string. So decode and load in dict
             matched_data = base64.b64decode(logline_dict["Metadata"]["encrypted_matched_data"])
-            encapped_key = matched_data[1:33]
+            # Some dirty splicing is needed, because originally the object is a RUST object
+            encapped_key = matched_data[1:33] # encapped_key is the HPKE shared key
             ciphertext = matched_data[41:]
 
             skr = suite_r.kem.deserialize_private_key(private_key)
@@ -40,6 +44,8 @@ def process_logfile_line(line):
                 plaintext_bytes = recipient.open(ciphertext)
                 plaintext = plaintext_bytes.decode('utf-8')
                 plaintext_dict = json.loads(plaintext)
+                # Take the existing logline JSON dict and add the decrypted data to a new JSON key "decrypted_matched_data" below the existing "Metadata"
+                # Note that the encrypted data is kept in the JSON object for anti-tampering control (might change in the future)
                 logline_dict['Metadata']["decrypted_matched_data"] = plaintext_dict
 
             except Exception as e:
