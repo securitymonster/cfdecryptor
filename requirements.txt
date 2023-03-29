@@ -3,11 +3,6 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
-
-os
-json
-base64
-azure-functions
 azure-eventhub
 azure-storage-blob
 pyhpke
