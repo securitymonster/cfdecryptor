@@ -2,7 +2,14 @@ import datetime
 import logging
 import os
 import azure.functions as func
-event_hub_name = os.environ.get('EVENT_HUB_NAME')
+
+
+def get_env_var(name: str) -> str:
+    try:
+        return os.environ[name]
+    except KeyError:
+        logging.error(f"Environment variable {name} not found.")
+        return ""
 
 
 def main(mytimer: func.TimerRequest) -> None:
@@ -10,6 +17,7 @@ def main(mytimer: func.TimerRequest) -> None:
 
     if mytimer.past_due:
         logging.info('The timer is past due!')
-        logging.info(f'The value of event_hub_name is {event_hub_name}')
+        logging.info(
+            f'The value of event_hub_name is {get_env_var("EVENT_HUB_NAME")}')
 
-    logging.info('Python timer trigger function ran at %s', utc_timestamp)
+    logging.info(f'Python timer trigger function ran at {utc_timestamp}')
