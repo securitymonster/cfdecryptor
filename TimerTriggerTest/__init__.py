@@ -1,7 +1,8 @@
 import datetime
 import logging
-
+import os
 import azure.functions as func
+event_hub_name = os.environ.get('EVENT_HUB_NAME')
 
 
 def main(mytimer: func.TimerRequest) -> None:
