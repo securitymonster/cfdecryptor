@@ -2,6 +2,7 @@
 from cfdecryptlog import EVENT_HUB_NAME
 import datetime
 import logging
+import os
 
 import azure.functions as func
 
