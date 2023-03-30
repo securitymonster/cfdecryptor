@@ -4,6 +4,8 @@ import logging
 
 import azure.functions as func
 
+from cfdecryptlog import EVENT_HUB_NAME
+
 
 def main(mytimer: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
