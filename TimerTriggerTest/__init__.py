@@ -3,6 +3,8 @@ import logging
 import os
 import azure.functions as func
 
+#  tarzan
+
 
 def get_env_var(name: str) -> str:
     try:
