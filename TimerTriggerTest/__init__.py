@@ -3,7 +3,8 @@ import logging
 import os
 import azure.functions as func
 
-#  tarzan
+# sebastiaan is de beste
+# john niet
 
 
 def get_env_var(name: str) -> str:
