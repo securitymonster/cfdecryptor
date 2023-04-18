@@ -8,7 +8,6 @@ from azure.eventhub import EventHubProducerClient, EventData
 EVENT_HUB_CONNECTION_STRING = os.environ['EVENT_HUB_CONNECTION_STRINGING']
 EVENT_HUB_NAME = os.environ['EVENT_HUB_NAME']
 
-Test = "test"
 
 # EVENT_HUB_NAME = "payloadlogs"
 # EVENT_HUB_CONN_STRING = "Endpoint=sb://payloadlogs.servicebus.windows.net/;SharedAccessKeyName=payloadsend;SharedAccessKey=ikZlmGSwTi69BmU1PjY9JbL6xtmIA9mmC+AEhPmv5aw="
