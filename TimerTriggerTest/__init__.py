@@ -1,26 +1,38 @@
-import datetime
-import logging
 import os
+import json
+import datetime
 import azure.functions as func
+from azure.eventhub import EventHubProducerClient, EventData
 
-# sebastiaan is de beste
-# john niet
-
-
-def get_env_var(name: str) -> str:
-    try:
-        return os.environ[name]
-    except KeyError:
-        logging.error(f"Environment variable {name} not found.")
-        return ""
+EVENT_HUB_CONNECTION_STR = os.environ['EVENT_HUB_CONNECTION_STRING']
+EVENT_HUB_NAME = os.environ['EVENT_HUB_NAME']
 
 
 def main(mytimer: func.TimerRequest) -> None:
-    utc_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    # Create a producer client to send messages to the event hub
+    producer = EventHubProducerClient.from_connection_string(
+        conn_str=EVENT_HUB_CONNECTION_STR, eventhub_name=EVENT_HUB_NAME
+    )
 
-    if mytimer.past_due:
-        logging.info('The timer is past due!')
-        logging.info(
-            f'The value of event_hub_name is {get_env_var("EVENT_HUB_NAME")}')
+    # Create a message to send
+    message = {"foo": "bar", "baz": 42}
+    message_bytes = json.dumps(message).encode("utf-8")
 
-    logging.info(f'Python timer trigger function ran at {utc_timestamp}')
+    # Create an event data object from the message
+    event_data = EventData(message_bytes)
+
+    # Send the event data to the event hub
+    with producer:
+        producer.send(event_data)
+
+    print('Message sent to event hub')
+
+
+def timer_triggered(timer: func.TimerRequest) -> None:
+    utc_timestamp = datetime.datetime.utcnow().replace(
+        tzinfo=datetime.timezone.utc).isoformat()
+    print(f'{utc_timestamp}: timer triggered.')
+
+
+# Schedule to trigger every 10 seconds
+schedule = '*/10 * * * * *'

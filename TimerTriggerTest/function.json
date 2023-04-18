@@ -2,10 +2,18 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "name": "mytimer",
+      "name": "timer",
       "type": "timerTrigger",
       "direction": "in",
-      "schedule": "0 */1 * * * *"
+      "schedule": "*/10 * * * * *"
+    },
+    {
+      "name": "outputEventHub",
+      "type": "eventHub",
+      "direction": "out",
+      "connection": "EVENT_HUB_CONNECTION_STRING",
+      "eventHubName": "EVENT_HUB_NAME",
+      "cardinality": "many"
     }
   ]
 }
