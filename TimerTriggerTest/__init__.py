@@ -4,14 +4,17 @@ import datetime
 import azure.functions as func
 from azure.eventhub import EventHubProducerClient, EventData
 
-EVENT_HUB_CONNECTION_STR = os.environ['EVENT_HUB_CONNECTION_STRING']
+EVENT_HUB_CONNECTION_STRING = os.environ['EVENT_HUB_CONNECTION_STRINGING']
 EVENT_HUB_NAME = os.environ['EVENT_HUB_NAME']
 
+
+# EVENT_HUB_NAME = "payloadlogs"
+# EVENT_HUB_CONN_STRING = "Endpoint=sb://payloadlogs.servicebus.windows.net/;SharedAccessKeyName=payloadsend;SharedAccessKey=ikZlmGSwTi69BmU1PjY9JbL6xtmIA9mmC+AEhPmv5aw="
 
 def main(mytimer: func.TimerRequest) -> None:
     # Create a producer client to send messages to the event hub
     producer = EventHubProducerClient.from_connection_string(
-        conn_str=EVENT_HUB_CONNECTION_STR, eventhub_name=EVENT_HUB_NAME
+        conn_str=EVENT_HUB_CONNECTION_STRING, eventhub_name=EVENT_HUB_NAME
     )
 
     # Create a message to send
