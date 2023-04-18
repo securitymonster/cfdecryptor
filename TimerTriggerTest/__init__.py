@@ -4,6 +4,7 @@ import datetime
 import azure.functions as func
 from azure.eventhub import EventHubProducerClient, EventData
 
+# testing this
 EVENT_HUB_CONNECTION_STRING = os.environ['EVENT_HUB_CONNECTION_STRINGING']
 EVENT_HUB_NAME = os.environ['EVENT_HUB_NAME']
 
