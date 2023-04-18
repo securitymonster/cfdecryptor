@@ -11,7 +11,7 @@
     "WEBSITE_CONTENTSHARE": "cfdecryptlog8a36",
     "AZURE_STORAGE_CONNECTION_STRING": "rgcf9412_STORAGE",
     "PRIVATE_KEY": "4HdvAugJGU7+eFWsJAKGA0/1Ssj7INi27KW/s+sEyW4=1",
-    "EVENT_HUB_CONN_STR": "Endpoint=sb://payloadlogs.servicebus.windows.net/;SharedAccessKeyName=payloadsend;SharedAccessKey=ikZlmGSwTi69BmU1PjY9JbL6xtmIA9mmC+AEhPmv5aw=",
+    "EVENT_HUB_CONNECTION_STRING": "Endpoint=sb://payloadlogs.servicebus.windows.net/;SharedAccessKeyName=payloadsend;SharedAccessKey=ikZlmGSwTi69BmU1PjY9JbL6xtmIA9mmC+AEhPmv5aw=",
     "EVENT_HUB_NAME": "payloadlogs",
     "CONTAINER_NAME": "ctlogs",
     "TEST": "tarzan"
